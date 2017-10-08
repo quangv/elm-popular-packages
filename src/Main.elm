@@ -22,9 +22,9 @@ init =
 ---- COMMANDS ----
 
 
-fetchPackages : Http.Request Package
+fetchPackages : Http.Request (List Package)
 fetchPackages =
-    Http.get "http://package.elm-lang.org/all-packages" decodePackages
+    Http.get ("https://cors-anywhere.herokuapp.com/" ++ "http://package.elm-lang.org/all-packages") decodePackages
 
 
 type alias Package =
@@ -34,8 +34,13 @@ type alias Package =
     }
 
 
-decodePackages : Decode.Decoder Package
+decodePackages : Decode.Decoder (List Package)
 decodePackages =
+    list decodePackage
+
+
+decodePackage : Decode.Decoder Package
+decodePackage =
     Decode.map3 Package
         (at [ "name" ] string)
         (at [ "summary" ] string)
@@ -48,7 +53,7 @@ decodePackages =
 
 type Msg
     = FetchPackages
-    | LoadPackages (Result Http.Error Package)
+    | LoadPackages (Result Http.Error (List Package))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
