@@ -6,9 +6,13 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts":
+    { "test": "echo \"Error: no test specified\" && exit 1"
+    , "start": "BROWSER=none elm app start"
+    , "build": "elm app build"
+    , "upload": "surge build elm-popular-packages.surge.sh"
+    , "deploy": "yarn run build && yarn run upload"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/quangv/elm-popular-packages.git"
