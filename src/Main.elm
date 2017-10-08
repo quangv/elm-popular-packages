@@ -15,6 +15,13 @@ type alias Model =
     }
 
 
+type alias Package =
+    { name : String
+    , summary : String
+    , versions : List String
+    }
+
+
 init : ( Model, Cmd Msg )
 init =
     ( { loadingPackages = True
@@ -25,19 +32,12 @@ init =
 
 
 
----- COMMANDS ----
+---- API ----
 
 
 fetchPackages : Http.Request (List Package)
 fetchPackages =
     Http.get ("https://cors-anywhere.herokuapp.com/" ++ "http://package.elm-lang.org/all-packages") decodePackages
-
-
-type alias Package =
-    { name : String
-    , summary : String
-    , versions : List String
-    }
 
 
 decodePackages : Decode.Decoder (List Package)
@@ -112,27 +112,6 @@ view model =
         , button [ onClick FetchPackages ] [ text "Fetch" ]
         , div [] (List.map viewPackage model.packages)
         ]
-
-
-
-{--
-viewPackages : Maybe Result Http.Error (List Package) -> Html Msg
-viewPackages packages =
-    case packages of
-        Nothing ->
-            div [] []
-
-        _ ->
-            div [] [ text "Well" ]
-
-
-
-        Err msg ->
-            div [] [ text "Error fetching packages" ]
-
-        Ok packages ->
-            List.map viewPackage packages
---}
 
 
 viewPackage : Package -> Html Msg
