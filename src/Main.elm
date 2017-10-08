@@ -11,12 +11,14 @@ import Json.Decode as Decode exposing (at, string, list)
 
 type alias Model =
     { loadingPackages : Bool
+    , packages : List Package
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { loadingPackages = True
+      , packages = []
       }
     , Http.send LoadPackages fetchPackages
     )
@@ -70,12 +72,27 @@ update msg model =
             in
                 ( model, Cmd.none )
 
-        LoadPackages a ->
+        LoadPackages response ->
             let
                 m =
-                    Debug.log "msg" ( msg, a )
+                    Debug.log "msg" (String.left 20 (toString msg))
             in
-                ( { model | loadingPackages = False }, Cmd.none )
+                ( { model
+                    | loadingPackages = False
+                    , packages = resultToList response
+                  }
+                , Cmd.none
+                )
+
+
+resultToList : Result Http.Error (List Package) -> List Package
+resultToList result =
+    case result of
+        Err msg ->
+            []
+
+        Ok packages ->
+            packages
 
 
 
@@ -93,6 +110,35 @@ view model =
                 text ""
             ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
+        , div [] (List.map viewPackage model.packages)
+        ]
+
+
+
+{--
+viewPackages : Maybe Result Http.Error (List Package) -> Html Msg
+viewPackages packages =
+    case packages of
+        Nothing ->
+            div [] []
+
+        _ ->
+            div [] [ text "Well" ]
+
+
+
+        Err msg ->
+            div [] [ text "Error fetching packages" ]
+
+        Ok packages ->
+            List.map viewPackage packages
+--}
+
+
+viewPackage : Package -> Html Msg
+viewPackage package =
+    div []
+        [ text package.name
         ]
 
 
