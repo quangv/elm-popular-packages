@@ -1,7 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1)
+import Html exposing (Html, text, div, h1, button)
 import Html.Attributes exposing (src)
+import Html.Events exposing (onClick)
 
 
 ---- MODEL ----
@@ -21,12 +22,18 @@ init =
 
 
 type Msg
-    = NoOp
+    = FetchPackages
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        FetchPackages ->
+            let
+                m =
+                    Debug.log "msg" msg
+            in
+                ( model, Cmd.none )
 
 
 
@@ -37,6 +44,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Elm Popular Packages" ]
+        , button [ onClick FetchPackages ] [ text "Fetch" ]
         ]
 
 
