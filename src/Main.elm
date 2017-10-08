@@ -1,8 +1,9 @@
 module Main exposing (..)
 
 import Html exposing (Html, text, div, h1, button)
-import Html.Attributes exposing (src)
 import Html.Events exposing (onClick)
+import Http
+import Json.Decode as Decode exposing (at, string, list)
 
 
 ---- MODEL ----
@@ -14,7 +15,31 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( {}, Http.send LoadPackages fetchPackages )
+
+
+
+---- COMMANDS ----
+
+
+fetchPackages : Http.Request Package
+fetchPackages =
+    Http.get "http://package.elm-lang.org/all-packages" decodePackages
+
+
+type alias Package =
+    { name : String
+    , summary : String
+    , versions : List String
+    }
+
+
+decodePackages : Decode.Decoder Package
+decodePackages =
+    Decode.map3 Package
+        (at [ "name" ] string)
+        (at [ "summary" ] string)
+        (at [ "versions" ] (list string))
 
 
 
@@ -23,6 +48,7 @@ init =
 
 type Msg
     = FetchPackages
+    | LoadPackages (Result Http.Error Package)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -32,6 +58,13 @@ update msg model =
             let
                 m =
                     Debug.log "msg" msg
+            in
+                ( model, Cmd.none )
+
+        LoadPackages a ->
+            let
+                m =
+                    Debug.log "msg" ( msg, a )
             in
                 ( model, Cmd.none )
 
