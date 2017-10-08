@@ -10,12 +10,16 @@ import Json.Decode as Decode exposing (at, string, list)
 
 
 type alias Model =
-    {}
+    { loadingPackages : Bool
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Http.send LoadPackages fetchPackages )
+    ( { loadingPackages = True
+      }
+    , Http.send LoadPackages fetchPackages
+    )
 
 
 
@@ -71,7 +75,7 @@ update msg model =
                 m =
                     Debug.log "msg" ( msg, a )
             in
-                ( model, Cmd.none )
+                ( { model | loadingPackages = False }, Cmd.none )
 
 
 
@@ -82,6 +86,12 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Elm Popular Packages" ]
+        , div []
+            [ if model.loadingPackages then
+                text "Loading..."
+              else
+                text ""
+            ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
         ]
 
