@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Array
 import Html exposing (Html, text, div, h1, button)
 import Html.Events exposing (onClick)
 import Http
@@ -21,6 +22,14 @@ type alias Package =
     { name : String
     , summary : String
     , versions : List String
+    }
+
+
+type alias PackageRow =
+    { name : String
+    , summary : String
+    , username : String
+    , repoName : String
     }
 
 
@@ -119,7 +128,7 @@ view model =
                 text ""
             ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
-        , Table.view config model.tableState model.packages
+        , Table.view config model.tableState (List.map mapPackages model.packages)
 
         --, div [] (List.map viewPackage model.packages)
         ]
@@ -132,6 +141,15 @@ viewPackage package =
         ]
 
 
+mapPackages : Package -> PackageRow
+mapPackages pkg =
+    let
+        name =
+            Array.fromList (String.split "/" pkg.name)
+    in
+        PackageRow pkg.name pkg.summary (Maybe.withDefault "" (Array.get 0 name)) (Maybe.withDefault "" (Array.get 1 name))
+
+
 
 ---- TABLE CONFIGURATION ----
 
@@ -141,7 +159,10 @@ config =
         { toId = .name
         , toMsg = SetTableState
         , columns =
-            [ Table.stringColumn "Name" .name ]
+            [ Table.stringColumn "Name" .name
+            , Table.stringColumn "Username" .username
+            , Table.stringColumn "RepoName" .repoName
+            ]
         }
 
 
