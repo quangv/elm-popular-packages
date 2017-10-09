@@ -161,7 +161,7 @@ config =
         , columns =
             [ Table.stringColumn "Name" .name
             , Table.stringColumn "Username" .username
-            , Table.stringColumn "RepoName" .repoName
+            , Table.stringColumn "Repo Name" .repoName
             ]
         }
 
