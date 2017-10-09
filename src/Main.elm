@@ -3,7 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, text, div, h1, button)
 import Html.Events exposing (onClick)
 import Http
-import Json.Decode as Decode exposing (at, string, list)
+import Json.Decode as Decode exposing (field, string, list)
 import Table
 
 
@@ -51,9 +51,9 @@ decodePackages =
 decodePackage : Decode.Decoder Package
 decodePackage =
     Decode.map3 Package
-        (at [ "name" ] string)
-        (at [ "summary" ] string)
-        (at [ "versions" ] (list string))
+        (field "name" string)
+        (field "summary" string)
+        (field "versions" (list string))
 
 
 
