@@ -4,6 +4,7 @@ import Html exposing (Html, text, div, h1, button)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (at, string, list)
+import Table
 
 
 ---- MODEL ----
@@ -12,6 +13,7 @@ import Json.Decode as Decode exposing (at, string, list)
 type alias Model =
     { loadingPackages : Bool
     , packages : List Package
+    , tableState : Table.State
     }
 
 
@@ -26,6 +28,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { loadingPackages = True
       , packages = []
+      , tableState = Table.initialSort "Name"
       }
     , Http.send LoadPackages fetchPackages
     )
@@ -60,6 +63,7 @@ decodePackage =
 type Msg
     = FetchPackages
     | LoadPackages (Result Http.Error (List Package))
+    | SetTableState Table.State
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -83,6 +87,11 @@ update msg model =
                   }
                 , Cmd.none
                 )
+
+        SetTableState newState ->
+            ( { model | tableState = newState }
+            , Cmd.none
+            )
 
 
 resultToList : Result Http.Error (List Package) -> List Package
@@ -110,7 +119,9 @@ view model =
                 text ""
             ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
-        , div [] (List.map viewPackage model.packages)
+        , Table.view config model.tableState model.packages
+
+        --, div [] (List.map viewPackage model.packages)
         ]
 
 
@@ -119,6 +130,19 @@ viewPackage package =
     div []
         [ text package.name
         ]
+
+
+
+---- TABLE CONFIGURATION ----
+
+
+config =
+    Table.config
+        { toId = .name
+        , toMsg = SetTableState
+        , columns =
+            [ Table.stringColumn "Name" .name ]
+        }
 
 
 
