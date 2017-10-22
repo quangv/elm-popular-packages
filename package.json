@@ -12,6 +12,7 @@
     , "build": "elm app build"
     , "upload": "surge build elm-popular-packages.surge.sh"
     , "deploy": "yarn run build && yarn run upload"
+    , "warn": "elm make src/Main.elm --warn --output /dev/null"
     },
   "repository": {
     "type": "git",

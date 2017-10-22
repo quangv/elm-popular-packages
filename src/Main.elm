@@ -154,8 +154,7 @@ mapPackages pkg =
 ---- TABLE CONFIGURATION ----
 
 
-config :
-    Table.Config { a | repoName : String, username : String, name : String } Msg
+config : Table.Config { a | repoName : String, username : String, name : String } Msg
 config =
     Table.config
         { toId = .name
