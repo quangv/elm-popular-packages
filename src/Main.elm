@@ -144,7 +144,7 @@ view model =
                 text ""
             ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
-        , Table.view config model.tableState (List.map mapPackages <| Debug.log "Result" model.packages)
+        , Table.view config model.tableState (List.map mapPackages model.packages)
 
         --, div [] (List.map viewPackage model.packages)
         ]
