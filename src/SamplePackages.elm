@@ -223,7 +223,7 @@ json =
     },
     {
         "name": "CallumJHays/elm-sliders",
-        "summary": "Typed wrapper around <input type=range> html elements",
+        "summary": "Typed wrapper around <input type=\\"range\\"> html elements",
         "versions": [
             "1.0.1",
             "1.0.0"
@@ -1216,7 +1216,7 @@ json =
     },
     {
         "name": "RomanErnst/updated-list",
-        "summary": "Elm package for working with lists of all kinds (ul, ol, table, etc.)",
+        "summary": "Elm package for working with \\"lists\\" of all kinds (ul, ol, table, etc.)",
         "versions": [
             "3.0.0",
             "2.0.0",
@@ -5107,7 +5107,7 @@ json =
     },
     {
         "name": "evancz/url-parser",
-        "summary": "Parse URLs into nicely structured data, useful for navigation / SPA routing",
+        "summary": "Parse URLs into nicely structured data, useful for navigation / \\"SPA routing\\"",
         "versions": [
             "2.0.1",
             "2.0.0",
@@ -7435,7 +7435,7 @@ json =
     },
     {
         "name": "lovasoa/elm-jsonpseudolist",
-        "summary": "JSON decoder for pseudo-array objects ({length:1, 0: 123})",
+        "summary": "JSON decoder for pseudo-array objects ({\\"length\\":1, \\"0\\": 123})",
         "versions": [
             "1.0.2",
             "1.0.1",
