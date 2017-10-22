@@ -4,8 +4,9 @@ import Array
 import Html exposing (Html, text, div, h1, button)
 import Html.Events exposing (onClick)
 import Http
-import Json.Decode as Decode exposing (field, string, list)
+import Json.Decode as Decode exposing (decodeString, field, string, list)
 import Table
+import SamplePackages
 
 
 ---- MODEL ----
@@ -35,30 +36,45 @@ type alias PackageRow =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { loadingPackages = True
-      , packages = []
+    ( { loadingPackages = False
+      , packages = decodePackages SamplePackages.json
       , tableState = Table.initialSort "Name"
       }
-    , Http.send LoadPackages fetchPackages
+      --, Http.send LoadPackages fetchPackages
+    , Cmd.none
     )
 
 
 
 ---- API ----
+{-
+   fetchPackages : Http.Request (List Package)
+   fetchPackages =
+       Http.get ("https://cors-anywhere.herokuapp.com/" ++ "http://package.elm-lang.org/all-packages") packagesDecoder
+-}
 
 
-fetchPackages : Http.Request (List Package)
-fetchPackages =
-    Http.get ("https://cors-anywhere.herokuapp.com/" ++ "http://package.elm-lang.org/all-packages") decodePackages
+decodePackages : String -> List Package
+decodePackages json =
+    case decodeString packagesDecoder json of
+        Ok list ->
+            list
+
+        Err error ->
+            let
+                _ =
+                    Debug.log "err" error
+            in
+                []
 
 
-decodePackages : Decode.Decoder (List Package)
-decodePackages =
-    list decodePackage
+packagesDecoder : Decode.Decoder (List Package)
+packagesDecoder =
+    list packageDecoder
 
 
-decodePackage : Decode.Decoder Package
-decodePackage =
+packageDecoder : Decode.Decoder Package
+packageDecoder =
     Decode.map3 Package
         (field "name" string)
         (field "summary" string)
@@ -128,7 +144,7 @@ view model =
                 text ""
             ]
         , button [ onClick FetchPackages ] [ text "Fetch" ]
-        , Table.view config model.tableState (List.map mapPackages model.packages)
+        , Table.view config model.tableState (List.map mapPackages <| Debug.log "Result" model.packages)
 
         --, div [] (List.map viewPackage model.packages)
         ]
