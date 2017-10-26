@@ -6,32 +6,15 @@ import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (decodeString, field, string, list)
 import Table
+
+
+-- Local
+
+import Types exposing (Model, Package, PackageRow)
 import SamplePackages
 
 
 ---- MODEL ----
-
-
-type alias Model =
-    { loadingPackages : Bool
-    , packages : List Package
-    , tableState : Table.State
-    }
-
-
-type alias Package =
-    { name : String
-    , summary : String
-    , versions : List String
-    }
-
-
-type alias PackageRow =
-    { name : String
-    , summary : String
-    , username : String
-    , repoName : String
-    }
 
 
 init : ( Model, Cmd Msg )
