@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Table
+import Http
 
 
 type alias Model =
@@ -23,3 +24,9 @@ type alias PackageRow =
     , username : String
     , repoName : String
     }
+
+
+type Msg
+    = FetchPackages
+    | LoadPackages (Result Http.Error (List Package))
+    | SetTableState Table.State

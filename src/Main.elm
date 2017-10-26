@@ -10,23 +10,8 @@ import Table
 
 -- Local
 
-import Types exposing (Model, Package, PackageRow)
-import SamplePackages
-
-
----- MODEL ----
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( { loadingPackages = False
-      , packages = decodePackages SamplePackages.json
-      , tableState = Table.initialSort "Name"
-      }
-      --, Http.send LoadPackages fetchPackages
-    , Cmd.none
-    )
-
+import Types exposing (Model, Package, PackageRow, Msg(..))
+import Model
 
 
 ---- API ----
@@ -35,43 +20,7 @@ init =
    fetchPackages =
        Http.get ("https://cors-anywhere.herokuapp.com/" ++ "http://package.elm-lang.org/all-packages") packagesDecoder
 -}
-
-
-decodePackages : String -> List Package
-decodePackages json =
-    case decodeString packagesDecoder json of
-        Ok list ->
-            list
-
-        Err error ->
-            let
-                _ =
-                    Debug.log "err" error
-            in
-                []
-
-
-packagesDecoder : Decode.Decoder (List Package)
-packagesDecoder =
-    list packageDecoder
-
-
-packageDecoder : Decode.Decoder Package
-packageDecoder =
-    Decode.map3 Package
-        (field "name" string)
-        (field "summary" string)
-        (field "versions" (list string))
-
-
-
 ---- UPDATE ----
-
-
-type Msg
-    = FetchPackages
-    | LoadPackages (Result Http.Error (List Package))
-    | SetTableState Table.State
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -174,7 +123,7 @@ main : Program Never Model Msg
 main =
     Html.program
         { view = view
-        , init = init
+        , init = Model.init
         , update = update
         , subscriptions = always Sub.none
         }
