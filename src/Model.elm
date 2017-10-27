@@ -12,8 +12,8 @@ import Types exposing (Model, Msg)
 
 init : ( Model, Cmd Msg )
 init =
-    ( { loadingPackages = False
-      , packages = decodePackages SamplePackages.json
+    ( { --loadingPackages = False
+        packages = decodePackages SamplePackages.json
       , tableState = Table.initialSort "Name"
       }
       --, Http.send LoadPackages fetchPackages

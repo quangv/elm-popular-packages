@@ -11,13 +11,16 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Elm Popular Packages" ]
-        , div []
-            [ if model.loadingPackages then
-                text "Loading..."
-              else
-                text ""
-            ]
-        , button [ onClick FetchPackages ] [ text "Fetch" ]
+
+        {- , div []
+           [ if model.loadingPackages then
+               text "Loading..."
+             else
+               text ""
+           ]
+           -
+        -}
+        --, button [ onClick FetchPackages ] [ text "Fetch" ]
         , Table.view config model.tableState (List.map mapPackages model.packages)
 
         --, div [] (List.map viewPackage model.packages)

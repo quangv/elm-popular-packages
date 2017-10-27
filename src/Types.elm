@@ -5,8 +5,8 @@ import Http
 
 
 type alias Model =
-    { loadingPackages : Bool
-    , packages : List Package
+    { --loadingPackages : Bool
+      packages : List Package
     , tableState : Table.State
     }
 
@@ -27,6 +27,6 @@ type alias PackageRow =
 
 
 type Msg
-    = FetchPackages
-    | LoadPackages (Result Http.Error (List Package))
-    | SetTableState Table.State
+    = --FetchPackages
+      --| LoadPackages (Result Http.Error (List Package))
+      SetTableState Table.State
