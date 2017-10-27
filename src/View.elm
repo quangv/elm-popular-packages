@@ -3,7 +3,7 @@ module View exposing (..)
 import Array
 import Html exposing (Html, text, div, h1, button)
 import Html.Events exposing (onClick)
-import Types exposing (Model, Package, PackageRow, Msg(..))
+import Types exposing (Model, Package, Msg(..))
 import Table
 
 
@@ -21,7 +21,7 @@ view model =
            -
         -}
         --, button [ onClick FetchPackages ] [ text "Fetch" ]
-        , Table.view config model.tableState (List.map mapPackages model.packages)
+        , Table.view config model.tableState <| Debug.log "mp" model.packages
 
         --, div [] (List.map viewPackage model.packages)
         ]
@@ -34,26 +34,18 @@ viewPackage package =
         ]
 
 
-mapPackages : Package -> PackageRow
-mapPackages pkg =
-    let
-        name =
-            Array.fromList (String.split "/" pkg.name)
-    in
-        PackageRow pkg.name pkg.summary (Maybe.withDefault "" (Array.get 0 name)) (Maybe.withDefault "" (Array.get 1 name))
-
-
 
 ---- TABLE CONFIGURATION ----
+--config : Table.Config { a | repoName : String, username : String, name : String } Msg
 
 
-config : Table.Config { a | repoName : String, username : String, name : String } Msg
 config =
     Table.config
         { toId = .name
         , toMsg = SetTableState
         , columns =
             [ Table.stringColumn "Name" .name
+            , Table.stringColumn "Summary" .summary
             , Table.stringColumn "Username" .username
             , Table.stringColumn "Repo Name" .repoName
             ]

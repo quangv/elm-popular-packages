@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Http
-import Types exposing (Model, Package, PackageRow, Msg(..))
+import Types exposing (Model, Package, Msg(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
